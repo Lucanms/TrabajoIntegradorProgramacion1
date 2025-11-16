@@ -11,7 +11,7 @@ El sistema permite realizar operaciones CRUD (crear, leer, actualizar, eliminar)
 Requisitos
 Software necesario
 
-Java 25
+Java 21
 
 MySQL Server (8.x recomendado)
 
@@ -37,7 +37,7 @@ En el archivo DatabaseConfig.java:
 
 public static final String URL = "jdbc:mysql://localhost:3306/biblioteca";
 public static final String USER = "root";
-public static final String PASSWORD = "1234";
+public static final String PASSWORD = "";
 
 
 (Modificar según se necesite.)
