@@ -34,9 +34,12 @@ public class AppMenu {
                     buscarPorId();
                     break;
                 case "4":
-                    actualizarLibro();
+                    buscarPorTitulo();
                     break;
                 case "5":
+                    actualizarLibro();
+                    break;
+                case "6":
                     eliminarLibro();
                     break;
                 case "X":
@@ -54,8 +57,9 @@ public class AppMenu {
         System.out.println("1) Crear Libro");
         System.out.println("2) Listar Libros");
         System.out.println("3) Buscar por ID");
-        System.out.println("4) Actualizar Libro");
-        System.out.println("5) Eliminar Libro");
+        System.out.println("4) Buscar por Titulo");
+        System.out.println("5) Actualizar Libro");
+        System.out.println("6) Eliminar Libro");
         System.out.println("X) Salir");
         System.out.print("Opción: ");
     }
@@ -64,33 +68,61 @@ public class AppMenu {
         try {
             System.out.print("Título: ");
             String titulo = sc.nextLine();
+            if (titulo.isBlank()) {
+                throw new Exception("El título no puede estar vacío.");
+            }
 
             System.out.print("Autor: ");
             String autor = sc.nextLine();
+            if (autor.isBlank()) {
+                throw new Exception("El autor no puede estar vacío.");
+            }
 
             System.out.print("Editorial: ");
             String editorial = sc.nextLine();
+            if (editorial.isBlank()) {
+                throw new Exception("La editorial no puede estar vacía.");
+            }
 
             System.out.print("Año edición: ");
-            int anio = Integer.parseInt(sc.nextLine());
-            
-            FichaBibliografica ficha = new FichaBibliografica();
+            String anioStr = sc.nextLine();
+            if (anioStr.isBlank()) {
+                throw new Exception("El año no puede estar vacío.");
+            }
+
+            int anio;
+            try {
+                anio = Integer.parseInt(anioStr);
+            } catch (NumberFormatException e) {
+                throw new Exception("El año debe ser un número entero válido.");
+            }
+            if (anio <= 0) {
+                throw new Exception("El año debe ser mayor que 0.");
+            }
+
             System.out.print("ISBN: ");
-            ficha.setIsbn(sc.nextLine());
+            String isbn = sc.nextLine();
+            if (isbn.isBlank()) {
+                throw new Exception("El ISBN no puede estar vacío.");
+            }
 
             System.out.print("Clasificación Dewey: ");
             String dewey = sc.nextLine();
+            if (dewey.isBlank()) {
+                throw new Exception("La clasificación Dewey no puede estar vacía.");
+            }
 
             System.out.print("Estantería: ");
             String estanteria = sc.nextLine();
+            if (estanteria.isBlank()) {
+                throw new Exception("La estantería no puede estar vacía.");
+            }
 
             System.out.print("Idioma: ");
             String idioma = sc.nextLine();
-
-            ficha.setClasificacionDewey(dewey);
-            ficha.setEstanteria(estanteria);
-            ficha.setIdioma(idioma);
-            ficha.setEliminado(false);
+            if (idioma.isBlank()) {
+                throw new Exception("El idioma no puede estar vacío.");
+            }
 
             Libro libro = new Libro();
             libro.setTitulo(titulo);
@@ -98,6 +130,14 @@ public class AppMenu {
             libro.setEditorial(editorial);
             libro.setAnioEdicion(anio);
             libro.setEliminado(false);
+
+            FichaBibliografica ficha = new FichaBibliografica();
+            ficha.setIsbn(isbn);
+            ficha.setClasificacionDewey(dewey);
+            ficha.setEstanteria(estanteria);
+            ficha.setIdioma(idioma);
+            ficha.setEliminado(false);
+
             libro.setFicha(ficha);
 
             ServicioLibro.insertar(libro);
@@ -127,6 +167,20 @@ public class AppMenu {
 
             Libro libro = ServicioLibro.getById(id);
             System.out.println(libro != null ? libro : "Ese libro no existe");
+
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    private void buscarPorTitulo() {
+        try {
+            System.out.print("Ingrese parte del título: ");
+            String t = sc.nextLine();
+
+            List<Libro> encontrados = ServicioLibro.buscarPorTitulo(t);
+
+            encontrados.forEach(System.out::println);
 
         } catch (Exception e) {
             System.out.println("ERROR: " + e.getMessage());
