@@ -27,11 +27,6 @@ public class LibroDaoImp implements LibroDao {
             if (rs.next()) {
                 long idLibro = rs.getLong(1);
                 libro.setIdLibro(idLibro);
-
-                if (libro.getFicha() != null) {
-                    libro.getFicha().setIdLibro(idLibro);
-                    fichaDao.crear(libro.getFicha(), conn);
-                }
             }
         }
     }
